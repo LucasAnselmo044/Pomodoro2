@@ -10,6 +10,8 @@ const TEMPOS = {
 
 type Modo = keyof typeof TEMPOS;
 
+let user: [number, string] = [1, "teste"];
+user.push(1);
 export default function Home() {
   const [modoAtual, setModoAtual] = useState<Modo>("pomodoro");
   const [tempo, setTempo] = useState(TEMPOS["pomodoro"]);
@@ -50,11 +52,14 @@ export default function Home() {
     setAtivo(false);
   };
 
+  const tempoTotal = TEMPOS[modoAtual];
+
+  const progresso = 1 * (1 - tempo / tempoTotal);
+
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen bg-zinc-900 text-white gap-8 p-4">
+    <main className="flex flex-col items-center justify-center min-h-screen bg-black text-white gap-8 p-4">
       <h1 className="text-3xl font-bold">Pomodoro Timer</h1>
 
-      {/* Botões de modo */}
       <div className="flex gap-4">
         {(["pomodoro", "pausa-curta", "pausa-longa"] as Modo[]).map((modo) => (
           <button
