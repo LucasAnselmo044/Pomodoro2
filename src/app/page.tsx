@@ -10,12 +10,11 @@ const TEMPOS = {
 
 type Modo = keyof typeof TEMPOS;
 
-let user: [number, string] = [1, "teste"];
-user.push(1);
 export default function Home() {
   const [modoAtual, setModoAtual] = useState<Modo>("pomodoro");
   const [tempo, setTempo] = useState(TEMPOS["pomodoro"]);
   const [ativo, setAtivo] = useState(false);
+  const [iniciado, setIniciado] = useState(false); // novo estado
 
   useEffect(() => {
     let intervalo: NodeJS.Timeout;
@@ -35,6 +34,7 @@ export default function Home() {
   useEffect(() => {
     setTempo(TEMPOS[modoAtual]);
     setAtivo(false);
+    setIniciado(false); // resetar flag de início
   }, [modoAtual]);
 
   const formatarTempo = (segundos: number) => {
@@ -44,17 +44,21 @@ export default function Home() {
   };
 
   const iniciar = () => {
-    if (!ativo) setAtivo(true);
+    if (!ativo) {
+      setAtivo(true);
+      setIniciado(true);
+    }
+  };
+
+  const pausarOuResumir = () => {
+    setAtivo((prev) => !prev);
   };
 
   const resetar = () => {
     setTempo(TEMPOS[modoAtual]);
     setAtivo(false);
+    setIniciado(false);
   };
-
-  const tempoTotal = TEMPOS[modoAtual];
-
-  const progresso = 1 * (1 - tempo / tempoTotal);
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-black text-white gap-8 p-4">
@@ -81,12 +85,28 @@ export default function Home() {
       <div className="text-6xl font-mono">{formatarTempo(tempo)}</div>
 
       <div className="flex gap-4">
-        <button
-          onClick={iniciar}
-          className="bg-green-600 px-4 py-2 rounded hover:bg-green-700"
-        >
-          Iniciar
-        </button>
+        {!iniciado && (
+          <button
+            onClick={iniciar}
+            className="bg-green-600 px-4 py-2 rounded hover:bg-green-700"
+          >
+            Iniciar
+          </button>
+        )}
+
+        {iniciado && (
+          <button
+            onClick={pausarOuResumir}
+            className={`px-4 py-2 rounded ${
+              ativo
+                ? "bg-yellow-600 hover:bg-yellow-700"
+                : "bg-blue-600 hover:bg-blue-700"
+            }`}
+          >
+            {ativo ? "Pausar" : "Resumir"}
+          </button>
+        )}
+
         <button
           onClick={resetar}
           className="bg-red-600 px-4 py-2 rounded hover:bg-red-700"
