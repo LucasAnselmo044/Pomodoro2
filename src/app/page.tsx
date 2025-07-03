@@ -11,10 +11,11 @@ const TEMPOS = {
 type Modo = keyof typeof TEMPOS;
 
 export default function Home() {
+  const [pomodorosConcluidos, setPomodorosConcluidos] = useState(0);
   const [modoAtual, setModoAtual] = useState<Modo>("pomodoro");
   const [tempo, setTempo] = useState(TEMPOS["pomodoro"]);
   const [ativo, setAtivo] = useState(false);
-  const [iniciado, setIniciado] = useState(false); // novo estado
+  const [iniciado, setIniciado] = useState(false);
 
   useEffect(() => {
     let intervalo: NodeJS.Timeout;
@@ -26,15 +27,32 @@ export default function Home() {
     } else if (tempo === 0) {
       setAtivo(false);
       alert("Tempo esgotado!");
+
+      if (modoAtual === "pomodoro") {
+        setPomodorosConcluidos((prev) => {
+          const novoTotal = prev + 1;
+
+          // 4 pomodoros = pausa longa
+          if (novoTotal % 4 === 0) {
+            setModoAtual("pausa-longa");
+          } else {
+            setModoAtual("pausa-curta");
+          }
+
+          return novoTotal;
+        });
+      } else {
+        setModoAtual("pomodoro");
+      }
     }
 
     return () => clearInterval(intervalo);
-  }, [ativo, tempo]);
+  }, [ativo, tempo, modoAtual]);
 
   useEffect(() => {
     setTempo(TEMPOS[modoAtual]);
     setAtivo(false);
-    setIniciado(false); // resetar flag de início
+    setIniciado(false);
   }, [modoAtual]);
 
   const formatarTempo = (segundos: number) => {
