@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 const TEMPOS = {
   pomodoro: 25 * 60,
@@ -10,7 +12,9 @@ const TEMPOS = {
 
 type Modo = keyof typeof TEMPOS;
 
-export default function Dashboard() {
+export default async function Dashboard() {
+  const session = await auth();
+  if (!session) redirect("/");
   const [pomodorosConcluidos, setPomodorosConcluidos] = useState(0);
   const [modoAtual, setModoAtual] = useState<Modo>("pomodoro");
   const [tempo, setTempo] = useState(TEMPOS["pomodoro"]);
