@@ -32,7 +32,6 @@ export default function Dashboard() {
         setPomodorosConcluidos((prev) => {
           const novoTotal = prev + 1;
 
-          // 4 pomodoros = pausa longa
           if (novoTotal % 4 === 0) {
             setModoAtual("pausa-longa");
           } else {
