@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 const TEMPOS = {
   pomodoro: 25 * 60,
   "pausa-curta": 5 * 60,
@@ -11,6 +12,7 @@ const TEMPOS = {
 type Modo = keyof typeof TEMPOS;
 
 export default function Dashboard() {
+  const { data: session, status } = useSession();
   const [pomodorosConcluidos, setPomodorosConcluidos] = useState(0);
   const [modoAtual, setModoAtual] = useState<Modo>("pomodoro");
   const [tempo, setTempo] = useState(TEMPOS["pomodoro"]);
@@ -76,6 +78,9 @@ export default function Dashboard() {
     setAtivo(false);
     setIniciado(false);
   };
+
+  if (status === "loading") return <h1>Carregando...</h1>;
+  if (!session) redirect("/");
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-black text-white gap-8 p-4">

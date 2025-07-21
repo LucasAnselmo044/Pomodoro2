@@ -7,4 +7,5 @@ export default async function DashboardPage() {
   if (!session) redirect("/");
 
   return <Dashboard />;
+  <p>a</p>;
 }
