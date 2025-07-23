@@ -1,6 +1,6 @@
-import SignIn from "./components/signin";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
+import LoginButtons from "./components/LoginButtons.";
 
 export default async function page() {
   const session = await auth();
@@ -14,7 +14,7 @@ export default async function page() {
             proceed, please click on the button above to login:
           </h1>
         </div>
-        <SignIn />
+        <LoginButtons />
       </main>
     );
   }
