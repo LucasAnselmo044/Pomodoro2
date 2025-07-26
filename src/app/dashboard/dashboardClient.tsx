@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import SignOut from "../components/signout";
 const TEMPOS = {
   pomodoro: 25 * 60,
   "pausa-curta": 5 * 60,
@@ -84,6 +85,16 @@ export default function Dashboard() {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-black text-white gap-8 p-4">
+      <div className="flex flex-col">
+        {session?.user?.image && (
+          <img
+            src={session.user.image}
+            alt="foto do usuário"
+            className="absolute w-15 h-15 rounded-full object-cover mx-auto top-0 right-26"
+          />
+        )}
+        <SignOut />
+      </div>
       <h1 className="text-3xl font-bold">Pomodoro Timer</h1>
 
       <div className="flex gap-4">
