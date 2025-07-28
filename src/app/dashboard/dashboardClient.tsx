@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import SignOut from "../components/signout";
+
 const TEMPOS = {
   pomodoro: 25 * 60,
   "pausa-curta": 5 * 60,

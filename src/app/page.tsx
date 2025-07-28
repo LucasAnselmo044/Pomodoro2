@@ -11,7 +11,8 @@ export default async function page() {
         <div className="text-3xl">
           <h1>
             Hello, welcome to Pomodoros. A site to help you on study focus. To
-            proceed, please click on the button above to login:
+            proceed, please click on the button above to login if you want to
+            save your study progress:
           </h1>
         </div>
         <LoginButtons />
