@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import SignOut from "../components/signout";
 
@@ -82,19 +82,29 @@ export default function Dashboard() {
   };
 
   if (status === "loading") return <h1>Carregando...</h1>;
-  if (!session) redirect("/");
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-black text-white gap-8 p-4">
       <div className="flex flex-col">
-        {session?.user?.image && (
-          <img
-            src={session.user.image}
-            alt="foto do usuário"
-            className="absolute w-15 h-15 rounded-full object-cover mx-auto top-0 right-26"
-          />
+        {session ? (
+          <>
+            {session?.user?.image && (
+              <img
+                src={session.user.image}
+                alt="foto do usuário"
+                className="absolute w-15 h-15 rounded-full object-cover mx-auto top-0 right-26"
+              />
+            )}
+            <SignOut />
+          </>
+        ) : (
+          <button
+            onClick={() => signIn()}
+            className="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Login{" "}
+          </button>
         )}
-        <SignOut />
       </div>
       <h1 className="text-3xl font-bold">Pomodoro Timer</h1>
 
